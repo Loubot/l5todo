@@ -9,10 +9,15 @@ use Redirect;
 use Illuminate\Http\Request;
  
 class ProjectsController extends Controller {
+
+    protected $rules = [
+        'name' => ['required', 'min:3'],
+        'slug' => ['required']
+    ];
  
     /**
      * Display a listing of the resource.
-     *
+     * @param  \Illuminate\HTTP\Request $request
      * @return Response
      */
     public function index()
@@ -38,6 +43,8 @@ class ProjectsController extends Controller {
      */
     public function store()
     {
+        $this->validate($request, $this->rules);
+
         $input = Input::all();
         Project::create( $input );
 
@@ -74,6 +81,8 @@ class ProjectsController extends Controller {
      */
     public function update(Project $project)
     {
+        $this->validate($request, $this->rules);
+
         $input = array_except(Input::all(), '_method');
         $project->update($input);
 

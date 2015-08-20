@@ -10,11 +10,18 @@ use Redirect;
 use Illuminate\Http\Request;
  
 class TasksController extends Controller {
+
+    protected rules = [
+        'name' => ['required', 'min:3'],
+        'slug' => ['required'],
+        'description' => ['required'],
+    ];
  
     /**
      * Display a listing of the resource.
      *
      * @param  \App\Project $project
+     * @param  \Illuminate\HTTP\Request $request
      * @return Response
      */
     public function index(Project $project)
@@ -41,6 +48,7 @@ class TasksController extends Controller {
      */
     public function store(Project $project)
     {
+        $this->validates($request, $this->rules)
         $input = Input::all();
         $input['project_id'] = $project->id;
         Task::create( $input );
